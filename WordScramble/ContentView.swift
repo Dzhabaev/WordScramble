@@ -16,9 +16,15 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    Text("Счёт: \(score)")
+                        .font(.headline)
+                }
                 Section {
                     TextField("Введите ваше слово", text: $newWord)
                         .textInputAutocapitalization(.never)
@@ -81,6 +87,8 @@ struct ContentView: View {
             return
         }
         
+        score += answer.count + 1
+        
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
@@ -90,6 +98,7 @@ struct ContentView: View {
     func startGame() {
         usedWords.removeAll()
         newWord = ""
+        score = 0
         
         if let startWordURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
             if let startWords = try? String(contentsOf: startWordURL, encoding: .utf8) {
