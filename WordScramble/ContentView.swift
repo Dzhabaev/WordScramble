@@ -34,6 +34,9 @@ struct ContentView: View {
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
+            .toolbar {
+                Button("Новая игра", action: startGame)
+            }
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError) {
                 Button("OK") {}
@@ -85,9 +88,12 @@ struct ContentView: View {
     }
     
     func startGame() {
+        usedWords.removeAll()
+        newWord = ""
+        
         if let startWordURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
-            if let startWords = try? String(contentsOf: startWordURL) {
-                let allWords = startWords.components(separatedBy: "\n")
+            if let startWords = try? String(contentsOf: startWordURL, encoding: .utf8) {
+                let allWords = startWords.components(separatedBy: .newlines)
                 rootWord = allWords.randomElement() ?? "silkworm"
                 return
             }
