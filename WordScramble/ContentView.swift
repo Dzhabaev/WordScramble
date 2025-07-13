@@ -63,6 +63,21 @@ struct ContentView: View {
             return
         }
         
+        guard answer.count >= 3 else {
+            wordError(title: "Слово слишком короткое", message: "Используйте слова из трёх и более букв")
+            return
+        }
+        
+        guard answer != rootWord else {
+            wordError(title: "Слово не может быть исходным", message: "Придумайте новое слово из букв '\(rootWord)'")
+            return
+        }
+        
+        guard !rootWord.contains(answer) else {
+            wordError(title: "Слово слишком очевидное", message: "Нельзя использовать часть исходного слова '\(rootWord)' как есть")
+            return
+        }
+        
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
